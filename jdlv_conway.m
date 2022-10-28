@@ -1,13 +1,13 @@
 N=100;
 N = N + 1;
 M = randi([0,1],N);
+%M = rand(N,N)>0.8 "dillution de proba"
 M(:,1)=0;
 M(:,N)=0;
 M(N,:)=0;
 M(1,:)=0;
 G = M;
 
-%M = rand(N,N)>0.8 "dillution de proba"
 for o = 1:1000000
     spy(M)
     for i = 1:N-2
