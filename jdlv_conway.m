@@ -18,8 +18,6 @@ for o = 1:1000000
             end
             if k == 3
                 G(i+1,j+1) = 1;
-            elseif k > 3 
-                G(i+1,j+1) = 0;
             elseif k == 2
                 G(i+1,j+1) = M(i+1,j+1);
             else
