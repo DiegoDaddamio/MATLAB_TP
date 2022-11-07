@@ -3,25 +3,34 @@
 %Import de donnée et arrangement de celles-ci
 M = importdata('K_Means_Data_Base.xlsx');
 M = M.data;
+%Nombre de clusters voulu
+cmax = 15;
 %Création de matrice pour la mémoire
 elbow = [0;0];
 C = elbow;
 K = [0,0];
+Groupe = zeros(718,1);
+%Activation de la visualisation
+visual = 1;
 
-%Visualisation graphique de la base de données
-hold on
-scatter(M(:,1),M(:,2),"filled","blue")
+if visual
+    %Visualisation graphique de la base de données
+    hold on
+    scatter(M(:,1),M(:,2),"filled","blue")
+end
 
 %Boucle qui nous permet d'incrémenter le nombre de centrïons (ici fixer au
 %maximum de 9, il peut bien entendu être modifier à la convenance de chacun)
-for c = 1 : 9
+for c = 1 : cmax
     %Les centrïons seront stocké dans la matrice K et le premier sera
     %choisi aléatoirement ainsi que le deuxième. Attention qu'à chaque
     %boucle c, il reprend les même centrions qu'avant, il ne fait qu'en
     %mettre un de plus aléatoirement.
     K(c,:) = rand(1,2)*100;
     %Visualisation graphique des centrïons initiaux
-    scatter(K(:,1),K(:,2),"red","filled")
+    if visual
+        scatter(K(:,1),K(:,2),"red","filled")
+    end
     %Création d'un bool pour ne pas avoir une boucle infinie
     again = true;
     %Boucle qui va nous faire rapprocher de nos centrïons finaux
@@ -80,6 +89,13 @@ for c = 1 : 9
                     bary = bary + M(i,:);
                     count = count + 1;
                 end
+                %Classification par groupe
+                %En balayage
+                if c == cmax
+                    if C(i,j) > 0
+                        Groupe(i,1) = j;
+                    end
+                end
             end
             %La condition suivante est une condition de sécurité via le
             %barycentre, car nous pourrions diviser par zéro, donc si le
@@ -91,8 +107,10 @@ for c = 1 : 9
         %Donc à la fin de celle-ci, nous aurons déterminé nos nouveaux
         %centrïons
         end
-        %Visualisation des mouvements de centrïons
-        scatter(K(:,1),K(:,2),"green","filled")
+        if visual
+            %Visualisation des mouvements de centrïons
+            scatter(K(:,1),K(:,2),"green","filled")
+        end
         %Nous allons nous servir de notre mémoire de comparaison pour
         %justement comparer avant et après la boucle. Si les même alors,
         %nous aurons nos centrïons fixes.
@@ -102,14 +120,20 @@ for c = 1 : 9
             again = false;
         end
     end
-    %Visualisation des points finaux (le nombre dépend du nombre de
-    %centrïons maximum, ici 9)
-    scatter(K(:,1),K(:,2),"magenta","filled")
+    if visual
+        %Visualisation des points finaux (le nombre dépend du nombre de
+        %centrïons maximum, ici 9)
+        scatter(K(:,1),K(:,2),"magenta","filled")
+    end
     %Ici nous construisons une matrice qui nous servira juste ci-dessous,
     %La matrice correspond à la distortion par centrïons.
     elbow(c,1) = c;
     elbow(c,2) = sum(sum(C.^2));
 end
-%Visualisation graphique pour déterminer le nombre de centrïon adéquat.
-figure('Name','Elbow Method','NumberTitle','off');
-scatter(elbow(:,1),elbow(:,2),"*")
+
+if visual
+    %Visualisation graphique pour déterminer le nombre de centrïon adéquat.
+    figure('Name','Elbow Method','NumberTitle','off');
+    scatter(elbow(:,1),elbow(:,2),"*")
+end
+disp(Groupe)
