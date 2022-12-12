@@ -26,7 +26,7 @@
                             %Assignation aux variables suivantes à une
                             %constante de 1, elles serviront par la suite
                             %pour une boucle à 1 passage
-                                Average_loop = 1;
+                                Average_loop = 5;
                                 Details_Density = 1;
                                 Max_Cut_Density = 1;
                             %Boucle récurrente jusqu'à ce qu'une densité
@@ -125,7 +125,12 @@
                         if River_ON == true
                             %Génération de la rivière
                                 %Centre de la rivière généré aléatoirement
-                                    River = randi([3,SizeWorld-1],1,1);
+                                    River_first = randi([3,SizeWorld-1],1,1);
+                                %Modélisation de plusieurs rivière se
+                                %superposant formant une grande rivière
+                                for u = 1 : randi([1,4],1)
+                                    %Remise à niveau de la rivière
+                                        River = River_first;
                                 %Boucle de création de la rivière ligne
                                 %par ligne de la matrice de la simulation
                                     for i = 2:SizeWorld+1
@@ -164,6 +169,7 @@
                                                     end
                                             end
                                     end
+                                end
                         end
                 %Choix de la color map par la fonction, celle-ci est
                 %expliquée dans celle-ci
