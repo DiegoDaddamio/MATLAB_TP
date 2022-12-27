@@ -25,7 +25,7 @@ for o = 1:1000000
             end 
         end
     end
-    spy(M); drawnow
+    drawnow;
     M = G;
 end
 
